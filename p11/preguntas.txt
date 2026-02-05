@@ -1,0 +1,10 @@
+¿calcular cuántos años más podremos seguir utilizando esta forma de contar? 
+Explica el razonamiento seguido para realizar el cálculo.
+long 64 bits quitas el bit de signo quedan 63 2^63 - 1
+2^63 / ms de un año
+
+¿Por qué a veces el tiempo medido sale 0?
+
+
+¿A partir de qué tamaño de problema (n) empezamos a obtener tiempos fiables?
+1250 (?)
