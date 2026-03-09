@@ -24,7 +24,7 @@ public class PuntosTrivial {
 		}
 		return new int[]{p1, p2};
 	}
-
+	
 	private static double distancia(double[] p1, double[] p2) {
 		double x = p1[0] - p2[0];
 		double y = p1[1] - p2[1];
