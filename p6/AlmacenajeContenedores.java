@@ -23,8 +23,19 @@ public class AlmacenajeContenedores {
         Integer[] array = new Integer[n];
         for (int i = 0; i < n; i++)
             array[i] = i;
+
+        // ordena de mayor a menor
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (objetos[array[j]] > objetos[array[i]]) {
+
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+        }
         
-        Arrays.sort(array, (a, b) -> objetos[b] - objetos[a]); // ordena de mayor a menor
         int[] objetosOrdenados = new int[n];
         for (int i = 0; i < n; i++)
             objetosOrdenados[i] = objetos[array[i]];
