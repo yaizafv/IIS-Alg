@@ -5,7 +5,7 @@ import java.io.*;
 public class Asignacion {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Uso: java p4.Asignacion <nombreFichero>");
+            System.out.println("fnf");
             return;
         }
 
@@ -17,7 +17,7 @@ public class Asignacion {
 
         System.out.println("Productividad P1 (Algoritmo 1): " + p1);
         System.out.println("Productividad P2 (Algoritmo 2): " + p2);
-        System.out.println("Asignación final (Máximo): " + Math.max(p1, p2));
+        System.out.println("Asignacion final (Maximo): " + Math.max(p1, p2));
     }
 
     public static long algoritmo1(int[][] m) {

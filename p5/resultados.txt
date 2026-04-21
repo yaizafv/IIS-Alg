@@ -1,0 +1,10 @@
+Para chequear la solución se muestra aquí el número total de coches (a babor + a estribor) que se pueden aparcar:
+
+para el caso test00.txt se pueden aparcar 5 coches
+para el caso test01.txt se pueden aparcar 2 coches
+para el caso test02.txt se pueden aparcar 4 coches
+para el caso test03.txt se pueden aparcar 4 coches
+para el caso test04.txt se pueden aparcar 4 coches
+para el caso test05.txt se pueden aparcar 3 coches
+para el caso test06.txt se pueden aparcar 10 coches
+para el caso test07.txt se pueden aparcar 11 coches

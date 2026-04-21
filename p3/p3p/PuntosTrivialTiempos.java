@@ -27,7 +27,7 @@ public class PuntosTrivialTiempos {
 		return Math.sqrt(x * x + y * y);
 	}
 
-	// main para probar funcionamiento y medir tiempos
+	// main 
 	public static void main(String args[]) {
 		long t1, t2;
 		int nPuntos = Integer.parseInt(args[0]);

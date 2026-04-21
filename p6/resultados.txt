@@ -1,0 +1,12 @@
+Para chequear la solución se muestra aquí el número mínimo de contenedores:
+
+para el caso test00.txt 4 contenedores
+para el caso test01.txt 1 contenedor
+para el caso test02.txt 8 contenedores
+para el caso test03.txt 2 contenedores
+para el caso test04.txt 10 contenedores
+para el caso test05.txt 14 contenedores
+para el caso test06.txt 7 contenedores
+para el caso test07.txt 8 contenedores
+para el caso test08.txt 16 contenedores
+para el caso test09.txt 33 contenedores

@@ -31,7 +31,7 @@ public class PuntosTrivial {
 		return Math.sqrt(x * x + y * y);
 	}
 
-	// main para probar funcionamiento y medir tiempos
+	// main
 	public static void main(String args[]) {
 		try {
 			double[][] puntos = leerFichero(args[0]);

@@ -9,108 +9,111 @@ import java.util.List;
 
 public class PuntosDyV {
 
-	// Clase auxiliar para manejar los resultados (puntos y distancia)
-    public static class Resultado {
-        int p1, p2;
-        double distancia;
+    static double minDist;
+    static double[] puntoA = new double[2];
+    static double[] puntoB = new double[2];
 
-        public Resultado(int p1, int p2, double distancia) {
-            this.p1 = p1;
-            this.p2 = p2;
-            this.distancia = distancia;
+    public static double[][] leerPuntos(String fichero) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(fichero));
+        int n = Integer.parseInt(br.readLine().trim());
+        double[][] puntos = new double[n][2];
+        for (int i = 0; i < n; i++) {
+            String[] partes = br.readLine().trim().split(",");
+            puntos[i][0] = Double.parseDouble(partes[0]);
+            puntos[i][1] = Double.parseDouble(partes[1]);
         }
+        br.close();
+        return puntos;
     }
 
-    public static Resultado puntosMasCercanos(double[][] puntos) {
-		if (puntos == null || puntos.length < 2) return null;
-        // Creamos un array de índices para no perder la referencia original del fichero
-        Integer[] indices = new Integer[puntos.length];
-        for (int i = 0; i < puntos.length; i++) indices[i] = i;
-
-        // 1. Pre-ordenar por coordenada X
-        Arrays.sort(indices, (i1, i2) -> Double.compare(puntos[i1][0], puntos[i2][0]));
-
-        return calcularRecursivo(puntos, indices, 0, puntos.length);
+    public static double dist(double[] p1, double[] p2) {
+        double dx = p1[0] - p2[0];
+        double dy = p1[1] - p2[1];
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
-    private static Resultado calcularRecursivo(double[][] puntos, Integer[] indicesX, int izq, int der) {
-        int medio = izq + (der - izq) / 2;
-        double lineaDivision = puntos[indicesX[medio]][0];
+    public static double dyv(double[][] puntos, int iz, int de) {
+        if (de - iz <= 2) {
+            return fuerzaBruta(puntos, iz, de);
+        }
 
-        Resultado resIzq = calcularRecursivo(puntos, indicesX, izq, medio);
-        Resultado resDer = calcularRecursivo(puntos, indicesX, medio, der);
+        int mid = (iz + de) / 2;
+        double xMid = puntos[mid][0];
 
-        Resultado minRes = (resIzq.distancia < resDer.distancia) ? resIzq : resDer;
-        double d = minRes.distancia;
+        double d1 = dyv(puntos, iz, mid);
+        double d2 = dyv(puntos, mid + 1, de);
+        double delta = Math.min(d1, d2);
 
-        List<Integer> franja = new ArrayList<>();
-        for (int i = izq; i < der; i++) {
-            if (Math.abs(puntos[indicesX[i]][0] - lineaDivision) < d) {
-                franja.add(indicesX[i]);
+        List<double[]> franja = new ArrayList<>();
+        for (int i = iz; i <= de; i++) {
+            if (Math.abs(puntos[i][0] - xMid) < delta) {
+                franja.add(puntos[i]);
             }
         }
-		
 
-        franja.sort((i1, i2) -> Double.compare(puntos[i1][1], puntos[i2][1]));
+        franja.sort((a, b) -> Double.compare(a[1], b[1]));
 
         for (int i = 0; i < franja.size(); i++) {
-            for (int j = i + 1; j < franja.size() && (puntos[franja.get(j)][1] - puntos[franja.get(i)][1]) < d; j++) {
-                double dist = distancia(puntos[franja.get(i)], puntos[franja.get(j)]);
-                if (dist < d) {
-                    d = dist;
-                    minRes = new Resultado(franja.get(i), franja.get(j), d);
+            for (int j = i + 1; j < franja.size()
+                    && (franja.get(j)[1] - franja.get(i)[1]) < delta; j++) {
+                double d = dist(franja.get(i), franja.get(j));
+                if (d < delta) {
+                    delta = d;
+                    if (d < minDist) {
+                        minDist = d;
+                        puntoA[0] = franja.get(i)[0];
+                        puntoA[1] = franja.get(i)[1];
+                        puntoB[0] = franja.get(j)[0];
+                        puntoB[1] = franja.get(j)[1];
+                    }
                 }
             }
         }
-
-        return minRes;
+        return delta;
     }
 
+    public static double fuerzaBruta(double[][] puntos, int iz, int de) {
+        double minLocal = Double.MAX_VALUE;
+        for (int i = iz; i <= de; i++) {
+            for (int j = i + 1; j <= de; j++) {
+                double d = dist(puntos[i], puntos[j]);
+                if (d < minLocal) {
+                    minLocal = d;
+                    if (d < minDist) {
+                        minDist = d;
+                        puntoA[0] = puntos[i][0];
+                        puntoA[1] = puntos[i][1];
+                        puntoB[0] = puntos[j][0];
+                        puntoB[1] = puntos[j][1];
+                    }
+                }
+            }
+        }
+        return minLocal;
+    }
 
-	private static double distancia(double[] p1, double[] p2) {
-		double x = p1[0] - p2[0];
-		double y = p1[1] - p2[1];
-		return Math.sqrt(x * x + y * y);
-	}
+    public static double[] resolver(double[][] puntos) {
+        Arrays.sort(puntos, (a, b) -> Double.compare(a[0], b[0]));
 
-	// main para probar funcionamiento y medir tiempos
-	public static void main(String args[]) {
-		try {
-			double[][] puntos = leerFichero(args[0]);
-			Resultado resultado = puntosMasCercanos(puntos);
-			System.out.println("Puntos más cercanos (Divide y Vencerás):");
-            System.out.printf("P1: (%.2f, %.2f)\n", puntos[resultado.p1][0], puntos[resultado.p1][1]);
-            System.out.printf("P2: (%.2f, %.2f)\n", puntos[resultado.p2][0], puntos[resultado.p2][1]);
-            System.out.printf("Distancia mínima: %.6f\n", resultado.distancia);
-		} catch (IOException e) {
-			System.out.println("Error leyendo el fichero: " + e.getMessage());
-		}
+        minDist = Double.MAX_VALUE;
+        puntoA = new double[2];
+        puntoB = new double[2];
 
-	} // main
+        dyv(puntos, 0, puntos.length - 1);
 
-	public static double[][] leerFichero(String nombreFichero) throws IOException {
+        return new double[] { puntoA[0], puntoA[1], puntoB[0], puntoB[1], minDist };
+    }
 
-		List<double[]> lista = new ArrayList<>();
-		BufferedReader br = new BufferedReader(new FileReader(nombreFichero));
+    public static void main(String[] arg) throws IOException {
+        if (arg.length < 1) {
+            System.out.println("fnf");
+            return;
+        }
+        double[][] puntos = leerPuntos(arg[0]);
+        double[] res = resolver(puntos);
 
-		String linea;
-
-		linea = br.readLine();
-		while ((linea = br.readLine()) != null) {
-			linea = linea.trim();
-			if (linea.isEmpty())
-				continue;
-			String[] partes = linea.split("[,\\s]+");
-			if (partes.length < 2) {
-				System.out.println("Línea inválida: " + linea);
-				continue;
-			}
-			double x = Double.parseDouble(partes[0]);
-			double y = Double.parseDouble(partes[1]);
-			lista.add(new double[] { x, y });
-		}
-		br.close();
-		return lista.toArray(new double[0][0]);
-	}
-
+        System.out.printf("PUNTOS MAS CERCANOS: [%.6f, %.6f] [%.6f, %.6f]%n",
+                res[0], res[1], res[2], res[3]);
+        System.out.printf("SU DISTANCIA MINIMA= %.6f%n", res[4]);
+    }
 }
