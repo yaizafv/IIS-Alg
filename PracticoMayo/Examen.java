@@ -1,5 +1,9 @@
 package mayo20;
 
+// Examen a partir del problema del seminario 6, que consistia en encontrar el camino de menor coste.
+// El examen consistia en realizar una pequeña modificacion para que en vez de devolver
+// el mejor camino devuelva todos los posibles
+
 // CAMINOS SIMPLES ENTRE DOS NODOS DIFERENTES DE UN GRAFO
 
 // SE CALCULAN TODOS LOS CAMINOS POSIBLES PARA IR CALCULANDO EL MEJOR (MENOR COSTE)
